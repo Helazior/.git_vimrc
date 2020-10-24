@@ -2,7 +2,6 @@ set nocompatible        " Must be first line
 
 source ~/.vimrc.before
 source ~/.vimrc.bundles
-
 " General {
 
     filetype plugin indent on   " Automatically detect file types.
@@ -156,6 +155,12 @@ source ~/.vimrc.bundles
     autocmd FileType haskell setlocal commentstring=--\ %s
     " Workaround broken colour highlighting in Haskell
     autocmd FileType haskell,rust setlocal nospell
+	" Visual mode pressing * or # searches for the current selection
+	" Super useful! From an idea by Michael Naumann
+	vnoremap <silent> * :<C-u>call VisualSelection('', '')<CR>/<C-R>=@/<CR><CR>
+	vnoremap <silent> # :<C-u>call VisualSelection('', '')<CR>?<C-R>=@/<CR><CR>
+	" Disable highlight when <leader><cr> is pressed
+	map <silent> <leader><cr> :noh<cr>
 
 " }
 
@@ -212,12 +217,6 @@ source ~/.vimrc.bundles
 " }
 
 " Plugins {
-" PIV {
-        if isdirectory(expand("~/.vim/bundle/PIV"))
-            let g:DisableAutoPHPFolding = 0
-            let g:PIVAutoClose = 0
-        endif
-    " }
 
     " Misc {
         if isdirectory(expand("~/.vim/bundle/matchit.zip"))
@@ -256,65 +255,6 @@ source ~/.vimrc.bundles
         endif
     " }
 
-    " PyMode {
-        " Disable if python support not present
-        if !has('python') && !has('python3')
-            let g:pymode = 0
-        endif
-
-        if isdirectory(expand("~/.vim/bundle/python-mode"))
-            let g:pymode_lint_checkers = ['pyflakes']
-            let g:pymode_trim_whitespaces = 0
-            let g:pymode_options = 0
-            let g:pymode_rope = 0
-        endif
-    " }
-
-    " ctrlp {
-        if isdirectory(expand("~/.vim/bundle/ctrlp.vim/"))
-            let g:ctrlp_working_path_mode = 'ra'
-            nnoremap <silent> <D-t> :CtrlP<CR>
-            nnoremap <silent> <D-r> :CtrlPMRU<CR>
-            let g:ctrlp_custom_ignore = {
-                \ 'dir':  '\.git$\|\.hg$\|\.svn$',
-                \ 'file': '\.exe$\|\.so$\|\.dll$\|\.pyc$' }
-
-            if executable('ag')
-                let s:ctrlp_fallback = 'ag %s --nocolor -l -g ""'
-            elseif executable('ack-grep')
-                let s:ctrlp_fallback = 'ack-grep %s --nocolor -f'
-            elseif executable('ack')
-                let s:ctrlp_fallback = 'ack %s --nocolor -f'
-            " On Windows use "dir" as fallback command.
-            else
-                let s:ctrlp_fallback = 'find %s -type f'
-            endif
-            if exists("g:ctrlp_user_command")
-                unlet g:ctrlp_user_command
-            endif
-			let g:ctrlp_user_command = {
-                \ 'types': {
-                    \ 1: ['.git', 'cd %s && git ls-files . --cached --exclude-standard --others'],
-                    \ 2: ['.hg', 'hg --cwd %s locate -I .'],
-                \ },
-                \ 'fallback': s:ctrlp_fallback
-            \ }
-
-            if isdirectory(expand("~/.vim/bundle/ctrlp-funky/"))
-                " CtrlP extensions
-                let g:ctrlp_extensions = ['funky']
-
-                "funky
-                nnoremap <Leader>fu :CtrlPFunky<Cr>
-            endif
-        endif
-    "}
-
-    " TagBar {
-        if isdirectory(expand("~/.vim/bundle/tagbar/"))
-            nnoremap <silent> <leader>tt :TagbarToggle<CR>
-        endif
-    "}
 
     " Rainbow {
         if isdirectory(expand("~/.vim/bundle/rainbow/"))
@@ -416,9 +356,6 @@ source ~/.vimrc.bundles
                     inoremap <expr> <Esc>   pumvisible() ? "\<C-y>\<Esc>" : "\<Esc>"
                     " <CR> accepts first, then sends the <CR>
                     inoremap <expr> <CR>    pumvisible() ? "\<C-y>\<CR>" : "\<CR>"
-                    " <Down> and <Up> cycle like <Tab> and <S-Tab>
-                    inoremap <expr> <Down>  pumvisible() ? "\<C-n>" : "\<Down>"
-                    inoremap <expr> <Up>    pumvisible() ? "\<C-p>" : "\<Up>"
                     " Jump up and down the list
                     inoremap <expr> <C-d>   pumvisible() ? "\<PageDown>\<C-p>\<C-n>" : "\<C-d>"
                     inoremap <expr> <C-u>   pumvisible() ? "\<PageUp>\<C-p>\<C-n>" : "\<C-u>"
@@ -529,9 +466,6 @@ source ~/.vimrc.bundles
                     inoremap <expr> <Esc>   pumvisible() ? "\<C-y>\<Esc>" : "\<Esc>"
                     " <CR> accepts first, then sends the <CR>
                     inoremap <expr> <CR>    pumvisible() ? "\<C-y>\<CR>" : "\<CR>"
-                    " <Down> and <Up> cycle like <Tab> and <S-Tab>
-                    inoremap <expr> <Down>  pumvisible() ? "\<C-n>" : "\<Down>"
-                    inoremap <expr> <Up>    pumvisible() ? "\<C-p>" : "\<Up>"
                     " Jump up and down the list
                     inoremap <expr> <C-d>   pumvisible() ? "\<PageDown>\<C-p>\<C-n>" : "\<C-d>"
                     inoremap <expr> <C-u>   pumvisible() ? "\<PageUp>\<C-p>\<C-n>" : "\<C-u>"
@@ -673,23 +607,4 @@ source ~/.vimrc.bundles
         endif
     endif
 " }
-"}
-"____________macros___________{
-	let @x='%%%x``x'
-	let @d='%%%hxx``xx'
-
-	let @a='i#' "place un commentaire et va à la ligne inferieur
-	let @z='xOB^^' "enlève un commentaire
-	let @c='i#include <stdio.h>#include <stdlib.h>int main(int argc, char* argv[]){return 0;}OAOA	'
-	let @p='iprintf("");ODODOD'
-	let @f='ifor (;;){}ODOAOCOCOCOCOCOC'
-
-	"if python:
-	autocmd FileType python let @c='i#!/usr/bin/env python3# -*- coding: utf-8 -*-'
-	autocmd FileType python let @p='iprint("")ODOD'
-	autocmd FileType python let @f='ifor i in range():ODOD'
-	"if C
-	autocmd BufRead,BufNewFile *.c,*.h,*.cpp let @t='a{}OA	 '
-	autocmd BufRead,BufNewFile *.c,*.h,*.cpp let @a='i//' "place un commentaire et va à la ligne inferieur
-	autocmd BufRead,BufNewFile *.c,*.h,*.cpp let @z='xxOB^^'
 "}
