@@ -1,0 +1,8 @@
+dans 
+~/.vim/bundle
+ale                  nerdcommenter     vim-airline-themes    vim-haml
+auto-pairs           python_match.vim  vim-bufferline        vim-json
+matchit.zip          rainbow           vim-colors            vim-over
+neocomplete.vim      restore_view.vim  vim-colorschemes      vim-preview
+neosnippet           tabular           vim-colors-solarized  vim-snippets
+neosnippet-snippets  vim-airline       vim-fugitive          vundle
