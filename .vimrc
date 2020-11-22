@@ -3,7 +3,6 @@ set nocompatible        " Must be first line
 source ~/.vimrc.before
 source ~/.vimrc.bundles
 " General {
-
     filetype plugin indent on   " Automatically detect file types.
     syntax on                   " Syntax highlighting
     set mouse=a                 " Automatically enable mouse usage
@@ -69,14 +68,28 @@ source ~/.vimrc.bundles
 
 " Vim UI {
 
-    if !exists('g:override_spf13_bundles') && filereadable(expand("~/.vim/bundle/vim-colors-solarized/colors/solarized.vim"))
-        let g:solarized_termcolors=256
-        let g:solarized_termtrans=1
-        let g:solarized_contrast="normal"
-        let g:solarized_visibility="normal"
-        color solarized             " Load a colorscheme
-    endif
 
+    if !exists('g:override_spf13_bundles') && filereadable(expand("~/.vim/bundle/gruvbox/colors/gruvbox.vim"))
+		set background=dark
+		"nnoremap <silent> [oh :call gruvbox#hls_show()<CR>
+		"nnoremap <silent> ]oh :call gruvbox#hls_hide()<CR>
+		"nnoremap <silent> coh :call gruvbox#hls_toggle()<CR>
+
+		"nnoremap * :let @/ = ""<CR>:call gruvbox#hls_show()<CR>*
+		"nnoremap / :let @/ = ""<CR>:call gruvbox#hls_show()<CR>/
+		"nnoremap ? :let @/ = ""<CR>:call gruvbox#hls_show()<CR>?
+        let g:gruvbox_contrast_dark="high"
+		let g:gruvbox_inverse=1
+		color gruvbox             " Load a colorscheme
+    endif
+    "if !exists('g:override_spf13_bundles') && filereadable(expand("~/.vim/bundle/vim-colors-solarized/colors/solarized.vim"))
+		"set background=dark
+        "let g:solarized_termcolors=256
+        "let g:solarized_termtrans=1
+        "let g:solarized_contrast="normal"
+        "let g:solarized_visibility="normal"
+        "color solarized             " Load a colorscheme
+    "endif
     set cursorline                  " Highlight current line
     
     highlight clear SignColumn      " SignColumn should match background
@@ -126,7 +139,6 @@ source ~/.vimrc.bundles
 
 " }
 " Formatting {
-
     "set nowrap                      " Do not wrap long lines
     set autoindent                  " Indent at the same level of the previous line
     set shiftwidth=4                " Use indents of 4 spaces
@@ -142,7 +154,7 @@ source ~/.vimrc.bundles
     " Remove trailing whitespaces and ^M chars
     " To disable the stripping of whitespace, add the following to your
     " .vimrc.before.local file:
-    "   let g:spf13_keep_trailing_whitespace = 1
+    let g:spf13_keep_trailing_whitespace = 1
     "autocmd FileType c,cpp,java,go,php,javascript,puppet,python,rust,twig,xml,yml,perl,sql autocmd BufWritePre <buffer> if !exists('g:spf13_keep_trailing_whitespace') | call StripTrailingWhitespace() | endif
     "autocmd FileType go autocmd BufWritePre <buffer> Fmt
     autocmd BufNewFile,BufRead *.html.twig set filetype=html.twig
@@ -159,8 +171,8 @@ source ~/.vimrc.bundles
 	" Super useful! From an idea by Michael Naumann
 	vnoremap <silent> * :<C-u>call VisualSelection('', '')<CR>/<C-R>=@/<CR><CR>
 	vnoremap <silent> # :<C-u>call VisualSelection('', '')<CR>?<C-R>=@/<CR><CR>
-	" Disable highlight when <leader><cr> is pressed
-	map <silent> <leader><cr> :noh<cr>
+	" Disable highlight when Enter is pressed
+	nnoremap <CR> :noh<CR><CR>
 
 " }
 
@@ -566,7 +578,7 @@ source ~/.vimrc.bundles
         " Default in terminal vim is 'dark'
         if isdirectory(expand("~/.vim/bundle/vim-airline-themes/"))
             if !exists('g:airline_theme')
-                let g:airline_theme = 'solarized'
+                let g:airline_theme = 'wombat'
             endif
             if !exists('g:airline_powerline_fonts')
                 " Use the default set of separators with a few customizations
