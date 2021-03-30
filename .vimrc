@@ -14,7 +14,6 @@ source ~/.vimrc.bundles
 	set foldmethod=indent
 	set foldlevel=1
 
-
     set clipboard=unnamed,unnamedplus
     " Most prefer to automatically switch to the current file directory when
     " a new buffer is opened; to prevent this behavior, add the following to
@@ -25,10 +24,10 @@ source ~/.vimrc.bundles
         " Always switch to the current file directory
     endif
 
-    set shortmess+=filmnrxoOtT          " Abbrev. of messages (avoids 'hit enter')
+	set shortmess+=filmnrxoOtT          " Abbrev. of messages (avoids 'hit enter')
     set viewoptions=folds,options,cursor,unix,slash " Better Unix / Windows compatibility
     set virtualedit=onemore             " Allow for cursor beyond last character
-    "set history=1000                   " Store a ton of history (default is 20)
+    set history=1000                   " Store a ton of history (default is 20)
     "set spell                          " Spell checking on
     set autowrite						" Automatically save before commands like :next and :make
 
@@ -69,7 +68,7 @@ source ~/.vimrc.bundles
 " Vim UI {
 
 
-    if !exists('g:override_spf13_bundles') && filereadable(expand("~/.vim/bundle/gruvbox/colors/gruvbox.vim"))
+    if filereadable(expand("~/.vim/bundle/gruvbox/colors/gruvbox.vim"))
 		set background=dark
 		"nnoremap <silent> [oh :call gruvbox#hls_show()<CR>
 		"nnoremap <silent> ]oh :call gruvbox#hls_hide()<CR>
@@ -155,8 +154,8 @@ source ~/.vimrc.bundles
     " To disable the stripping of whitespace, add the following to your
     " .vimrc.before.local file:
     let g:spf13_keep_trailing_whitespace = 1
-    "autocmd FileType c,cpp,java,go,php,javascript,puppet,python,rust,twig,xml,yml,perl,sql autocmd BufWritePre <buffer> if !exists('g:spf13_keep_trailing_whitespace') | call StripTrailingWhitespace() | endif
-    "autocmd FileType go autocmd BufWritePre <buffer> Fmt
+    autocmd FileType c,cpp,java,go,php,javascript,puppet,python,rust,twig,xml,yml,perl,sql autocmd BufWritePre <buffer> if !exists('g:spf13_keep_trailing_whitespace') | call StripTrailingWhitespace() | endif
+    autocmd FileType go autocmd BufWritePre <buffer> Fmt
     autocmd BufNewFile,BufRead *.html.twig set filetype=html.twig
     autocmd FileType haskell,puppet,ruby,yml setlocal expandtab shiftwidth=2 softtabstop=2
     " preceding line best in a plugin but here for now.
@@ -176,11 +175,19 @@ source ~/.vimrc.bundles
 
 " }
 
+
 " Key (re)Mappings {
  	"The default leader is '\', but many people prefer ',' as it's in a standard
 	"location
 	let mapleader = ','
 
+	" Visual blocks in Ctrl q
+	" map <C-v> <C-q>
+	" real Ctrl v
+	"map <C-S-v> <C-v>
+	autocmd filetype python nnoremap <F6> :w <bar> exec '!python '.shellescape('%')<CR>
+	autocmd filetype c nnoremap <F6> :w <bar> exec '!gcc '.shellescape('%').' -o '.shellescape('%:r').' && ./'.shellescape('%:r')<CR>
+	autocmd filetype cpp nnoremap <F6> :w <bar> exec '!g++ '.shellescape('%').' -o '.shellescape('%:r').' && ./'.shellescape('%:r')<CR>
 	" Easier moving in tabs and windows
 	map <C-J> <C-W>j<C-W>_
 	map <C-K> <C-W>k<C-W>_
@@ -199,7 +206,7 @@ source ~/.vimrc.bundles
 	vnoremap > >gv
 
     " Allow using the repeat operator with a visual selection (!)
-    "vnoremap . :normal .<CR>
+	"vnoremap . :normal .<CR>
 	
 	"For when you forget to sudo.. Really Write the file.
     cmap w!! w !sudo tee % >/dev/null
@@ -286,7 +293,7 @@ source ~/.vimrc.bundles
             nnoremap <silent> <leader>gw :Gwrite<CR>
             nnoremap <silent> <leader>ge :Gedit<CR>
             " Mnemonic _i_nteractive
-            nnoremap <silent> <leader>gi :Git add -p %<CR>
+            nnoremap <silent> <leader>ga :Git add -p %<CR>
             nnoremap <silent> <leader>gg :SignifyToggle<CR>
         endif
     "}
