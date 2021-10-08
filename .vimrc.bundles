@@ -63,7 +63,8 @@
             Bundle 'tpope/vim-surround'
             Bundle 'tpope/vim-repeat'
             Bundle 'rhysd/conflict-marker.vim'
-            Bundle 'jiangmiao/auto-pairs'
+            "Bundle 'jiangmiao/auto-pairs'
+            Bundle 'tpope/vim-endwise'
             Bundle 'ctrlpvim/ctrlp.vim'
             Bundle 'tacahiroy/ctrlp-funky'
             Bundle 'terryma/vim-multiple-cursors'
@@ -95,6 +96,7 @@
             Bundle 'gcmt/wildfire.vim'
         endif
     " }
+    "
 
     " Writing {
         if count(g:spf13_bundle_groups, 'writing')
@@ -122,39 +124,12 @@
         endif
     " }
 
-    " Snippets & AutoComplete {
-        if count(g:spf13_bundle_groups, 'snipmate')
-            Bundle 'garbas/vim-snipmate'
-            Bundle 'honza/vim-snippets'
-            " Source support_function.vim to support vim-snippets.
-            if filereadable(expand("~/.vim/bundle/vim-snippets/snippets/support_functions.vim"))
-                source ~/.vim/bundle/vim-snippets/snippets/support_functions.vim
-            endif
-        elseif count(g:spf13_bundle_groups, 'youcompleteme')
-            Bundle 'Valloric/YouCompleteMe'
-            Bundle 'SirVer/ultisnips'
-            Bundle 'honza/vim-snippets'
-        elseif count(g:spf13_bundle_groups, 'neocomplcache')
-            Bundle 'Shougo/neocomplcache'
-            Bundle 'Shougo/neosnippet'
-            Bundle 'Shougo/neosnippet-snippets'
-            Bundle 'honza/vim-snippets'
-        elseif count(g:spf13_bundle_groups, 'neocomplete')
-            Bundle 'Shougo/neocomplete.vim.git'
-            Bundle 'Shougo/neosnippet'
-            Bundle 'Shougo/neosnippet-snippets'
-            Bundle 'honza/vim-snippets'
-        endif
-    " }
-
-
     " Python {
         if count(g:spf13_bundle_groups, 'python')
             " Pick either python-mode or pyflakes & pydoc
             Bundle 'klen/python-mode'
             Bundle 'yssource/python.vim'
             Bundle 'python_match.vim'
-            Bundle 'pythoncomplete'
         endif
     " }
 
@@ -179,24 +154,61 @@
 	let @x='%%%x``x'
 	let @d='%%%hxx``xx'
 
-	let @a='i#' "place un commentaire et va à la ligne inferieur
+	let @a='i#
+' "place un commentaire et va à la ligne inferieur
 	let @z='xOB^^' "enlève un commentaire
-	let @c='i#include <stdio.h>#include <stdlib.h>int main(int argc, char* argv[]){return 0;}OAOA	'
-	let @p='iprintf("");ODODOD'
-	let @f='ifor (;;){}ODOAOCOCOCOCOCOC'
+	let @c='i#include <stdio.h>
+#include <stdlib.h>
+
+int main(int argc, char* argv[]){
+
+return 0;
+}OAOA	'
+	let @p='iprintf("\n");ODODODODOD'
+	let @f='ifor (;;){
+}ODOAOCOCOCOCOCOC'
 
 	"if python:
-	autocmd FileType python let @c='i#!/usr/bin/env python3# -*- coding: utf-8 -*-def main():"""if __name__ == "__main__:main()OAOAOAOA'
+	autocmd FileType python let @c='i#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+def main():
+"""
+
+if __name__ == "__main__:
+main()OAOAOAOA'
 	autocmd FileType python let @p='iprint("")ODOD'
 	autocmd FileType python let @f='ifor i in range():ODOD'
 	"if C:
-	autocmd BufRead,BufNewFile *.c,*.h,*.cpp let @t='a{}OA	 '
-	autocmd BufRead,BufNewFile *.c,*.h,*.cpp let @a='i//' "place un commentaire et va à la ligne inferieur
+	autocmd BufRead,BufNewFile *.c,*.h,*.cpp let @t='a
+{
+
+}OA	 '
+	autocmd BufRead,BufNewFile *.c,*.h,*.cpp let @a='i//
+' "place un commentaire et va à la ligne inferieur
 	autocmd BufRead,BufNewFile *.c,*.h,*.cpp let @z='xxOB^^'
+	"if Java:
+	autocmd BufRead,BufNewFile *.java let @p='iSystem.out.println();ODOD'
 " }
 
+Plugin 'ycm-core/YouCompleteMe'
+
 " code check when saved
+Plugin 'dense-analysis/ale'
 let g:ale_lint_on_text_changed = 'always'
 let g:ale_lint_on_insert_leave = 1
 let g:ale_fix_on_save = 1
 nmap <Leader>P :Preview<CR>
+
+"Correcteur orthographique"
+setlocal spell
+let loaded_spellfile_plugin = 1
+setlocal spelllang=fr,en
+hi clear SpellBad
+hi clear SpellCap
+hi clear SpellRare
+hi clear SpellLocal
+hi SpellBad   cterm=underline ctermfg=9  ctermbg=0 gui=undercurl
+hi SpellCap   cterm=underline ctermfg=14 ctermbg=0 gui=undercurl
+hi SpellRare  cterm=underline ctermfg=13 ctermbg=0 gui=undercurl
+hi SpellLocal cterm=underline ctermfg=11 ctermbg=0 gui=undercurl
